@@ -1568,7 +1568,7 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
 /* ========== AUTH LAYOUT (Login/Register) ========== */
 .auth-layout {
   display: flex;
-  min-height: calc(100vh - 64px);
+  height: 100vh;
   background: var(--white);
 }
 

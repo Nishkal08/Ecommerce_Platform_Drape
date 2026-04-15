@@ -50,6 +50,14 @@ const InnerLayout = () => (
   </>
 );
 
+// Layout for auth pages (transparent navbar, no footer)
+const AuthLayout = () => (
+  <>
+    <Navbar />
+    <Outlet />
+  </>
+);
+
 // Protected route wrapper
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
@@ -111,13 +119,17 @@ function App() {
           <Route path="/" element={<HomePage />} />
         </Route>
 
+        {/* Auth pages use full screen layout without footer */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+
         {/* Inner public pages use solid navbar */}
         <Route element={<InnerLayout />}>
           <Route path="/products" element={<ProductListingPage />} />
           <Route path="/products/:slug" element={<ProductDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Route>
