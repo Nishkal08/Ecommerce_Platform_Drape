@@ -28,7 +28,7 @@ const RegisterPage = () => {
   return (
     <div className="auth-layout">
       <div className="auth-layout__image">
-        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1400&auto=format&fit=crop" alt="DRAPE Design" style={{ objectPosition: 'center 10%' }} />
+        <img src="https://images.unsplash.com/photo-1510832198440-a52376950479?q=80&w=1400&auto=format&fit=crop" alt="DRAPE Design" style={{ objectPosition: 'center 10%' }} />
         <div className="auth-layout__image-overlay">
           <h2>Join a world of refined elegance.</h2>
         </div>

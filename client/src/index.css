@@ -96,6 +96,12 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   box-shadow: 0 1px 0 var(--border);
 }
 
+.navbar--auth-dark {
+  background: #000000;
+  color: var(--white);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+}
+
 .navbar__brand {
   font-family: var(--font-serif);
   font-size: 20px;

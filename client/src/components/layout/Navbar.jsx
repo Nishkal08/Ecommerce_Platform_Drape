@@ -5,7 +5,7 @@ import useScrollNav from '../../hooks/useScrollNav';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 
-const Navbar = ({ forcesolid }) => {
+const Navbar = ({ forcesolid, isAuth }) => {
   const isScrolled = useScrollNav();
   const location = useLocation();
   const { cartCount } = useCart();
@@ -18,10 +18,12 @@ const Navbar = ({ forcesolid }) => {
   const isCategoryHero = location.pathname === '/products' && (category === 'men' || category === 'women');
 
   const solid = (forcesolid && !isCategoryHero) || (!isHome && !isCategoryHero) || isScrolled;
+  let navClass = solid ? 'navbar--solid' : 'navbar--transparent';
+  if (isAuth) navClass = 'navbar--auth-dark';
 
   return (
     <>
-      <nav className={`navbar px-4 md:px-12 ${solid ? 'navbar--solid' : 'navbar--transparent'}`}>
+      <nav className={`navbar px-4 md:px-12 ${navClass}`}>
         {/* Left Side: Desktop Links or Mobile Hamburger */}
         <div className="flex items-center flex-1">
           <button className="md:hidden block text-2xl -ml-1" onClick={() => setDrawerOpen(true)} aria-label="Menu">

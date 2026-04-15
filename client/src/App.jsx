@@ -50,11 +50,12 @@ const InnerLayout = () => (
   </>
 );
 
-// Layout for auth pages (transparent navbar, no footer)
+// Layout for auth pages (transparent navbar, no footer -> now WITH footer per user request)
 const AuthLayout = () => (
   <>
-    <Navbar />
+    <Navbar isAuth />
     <Outlet />
+    <Footer />
   </>
 );
 
