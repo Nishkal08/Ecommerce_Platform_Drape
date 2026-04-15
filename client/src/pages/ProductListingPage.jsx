@@ -56,16 +56,16 @@ const ProductListingPage = () => {
     setSearchParams(params);
   }, [category, search, sort, page]);
 
-  const isCategoryHero = category === 'men' || category === 'women';
+  const isCategoryHero = category === 'men' || category === 'women' || category === 'accessories';
   
   return (
     <div className={!isCategoryHero ? "page" : ""}>
       {isCategoryHero ? (
         <section style={{ position: 'relative', width: '100%', height: '85vh', minHeight: '600px', overflow: 'hidden', background: '#1a1a1a', marginBottom: '40px' }}>
           <img 
-            src={category === 'men' ? '/men-hero.png' : '/women-hero.png'} 
+            src={category === 'men' ? '/men-hero.png' : category === 'women' ? '/women-hero.png' : '/accessories-hero.png'} 
             alt={`${category} collection`}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: category === 'women' ? 'center 15%' : 'center 5%' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: category === 'women' ? 'center 15%' : 'center center' }}
             loading="eager"
           />
           
@@ -88,9 +88,10 @@ const ProductListingPage = () => {
           
           <h1 className="absolute bottom-8 left-6 md:bottom-12 md:left-12 z-10 m-0 text-white font-sans font-semibold tracking-tight shadow-black/40" style={{ 
             fontSize: 'clamp(40px, 8vw, 84px)', 
-            textShadow: '0 4px 24px rgba(0,0,0,0.5)'
+            textShadow: '0 4px 24px rgba(0,0,0,0.5)',
+            textTransform: 'capitalize'
           }}>
-            For {category === 'men' ? 'Men' : 'Women'}
+            {category === 'accessories' ? 'Accessories' : `For ${category === 'men' ? 'Men' : 'Women'}`}
           </h1>
         </section>
       ) : (

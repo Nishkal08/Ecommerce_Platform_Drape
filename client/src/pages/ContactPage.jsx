@@ -21,12 +21,31 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="page">
-      <div className="page-header" style={{ marginBottom: '64px' }}>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '48px', fontWeight: '400', letterSpacing: '-0.02em' }}>Contact</h1>
-      </div>
+    <>
+      <section style={{ position: 'relative', width: '100%', height: '70vh', minHeight: '500px', overflow: 'hidden', background: '#1a1a1a', marginBottom: '80px' }}>
+        <img 
+          src="/contact-hero.png" 
+          alt="Contact Concierge"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
+          loading="eager"
+        />
+        
+        {/* Authentic Film Grain Overlay Layer */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1, opacity: 0.18, mixBlendMode: 'overlay', backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
 
-      <div className="page-content">
+        {/* Top Gradient for Navbar legibility */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '25%', background: 'linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }}></div>
+        
+        {/* Sharp Bottom Gradient strictly matching MARION demo */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '35%', background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 35%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }}></div>
+        
+        <h1 className="absolute bottom-8 left-6 md:bottom-12 md:left-12 z-10 m-0 text-white font-sans font-semibold tracking-tight shadow-black/40" style={{ fontSize: 'clamp(40px, 8vw, 84px)', textShadow: '0 4px 24px rgba(0,0,0,0.5)' }}>
+          Contact
+        </h1>
+      </section>
+
+      <div className="container" style={{ padding: '0 20px', maxWidth: '1200px', margin: '0 auto', marginBottom: '80px' }}>
+        <div className="page-content">
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '64px' }}>
           
           {/* Top Row: Intro & Form */}
@@ -119,7 +138,7 @@ const ContactPage = () => {
 
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
