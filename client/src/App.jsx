@@ -82,15 +82,29 @@ function App() {
   return (
     <Router>
       <Toaster
-        position="top-right"
+        position="bottom-center"
+        reverseOrder={false}
         toastOptions={{
-          duration: 3000,
+          duration: 3500,
           style: {
             fontFamily: "'Inter', sans-serif",
-            fontSize: '14px',
-            borderRadius: '4px',
-            background: '#1A1A1A',
+            fontSize: '13px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: '500',
+            borderRadius: '0px',
+            background: 'rgba(26, 26, 26, 0.95)',
             color: '#fff',
+            border: '1px solid rgba(255,255,255,0.1)',
+            padding: '14px 24px',
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+          },
+          success: {
+            iconTheme: { primary: '#fff', secondary: '#000' },
+          },
+          error: {
+            iconTheme: { primary: '#ef4444', secondary: '#fff' },
           },
         }}
       />
