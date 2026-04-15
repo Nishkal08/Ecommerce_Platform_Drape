@@ -6,6 +6,7 @@ An ultra-premium, mobile-first fashion e-commerce platform built with the full-s
 - **Frontend**: React.js, Tailwind CSS, React Router DOM
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Mongoose ORM)
+- **Media Storage**: Cloudinary (Image uploads & CDN delivery)
 - **Authentication**: JWT (JSON Web Tokens) stored securely via `httpOnly` cookies
 - **Payment Processing**: Razorpay API
 
