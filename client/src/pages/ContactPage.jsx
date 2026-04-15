@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import api from '../services/api';
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -10,7 +10,7 @@ const ContactPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('/api/contact/send', form);
+      await api.post('/contact/send', form);
       toast.success('Message sent! We\'ll get back to you soon.');
       setForm({ name: '', email: '', message: '' });
     } catch (error) {
