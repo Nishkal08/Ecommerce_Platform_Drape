@@ -1573,57 +1573,50 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
 
 /* ========== AUTH LAYOUT (Login/Register) ========== */
 .auth-layout {
-  display: flex;
-  height: 100vh;
-  background: var(--white);
-}
-
-.auth-layout__image {
-  flex: 1;
-  display: none;
-  background-color: var(--surface);
   position: relative;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 20px 80px;
+  background: var(--charcoal);
   overflow: hidden;
 }
 
-@media (min-width: 992px) {
-  .auth-layout__image {
-    display: block;
-  }
+.auth-layout__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 1;
 }
 
 .auth-layout__image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0.55;
+  transition: transform 10s ease-out;
 }
 
+.auth-layout:hover .auth-layout__image img {
+  transform: scale(1.05);
+}
+
+/* We hide the old overlay to keep the centered car focus */
 .auth-layout__image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
-  display: flex;
-  align-items: flex-end;
-  padding: 60px;
-}
-
-.auth-layout__image-overlay h2 {
-  color: var(--white);
-  font-family: var(--font-serif);
-  font-size: 32px;
-  max-width: 80%;
-  line-height: 1.2;
+  display: none;
 }
 
 .auth-layout__content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  padding: 48px;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
 }
 
 .auth-layout__form-wrapper {

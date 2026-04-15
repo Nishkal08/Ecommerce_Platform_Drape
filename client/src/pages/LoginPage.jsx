@@ -27,10 +27,7 @@ const LoginPage = () => {
   return (
     <div className="auth-layout">
       <div className="auth-layout__image">
-        <img src="https://images.unsplash.com/photo-1509631179647-0c5000642f55?q=80&w=1400&auto=format&fit=crop" alt="DRAPE Fashion" style={{ objectPosition: 'center center' }} />
-        <div className="auth-layout__image-overlay">
-          <h2>Elevate your everyday wardrobe.</h2>
-        </div>
+        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600&auto=format&fit=crop" alt="DRAPE Fashion" style={{ objectPosition: 'center center' }} />
       </div>
       <div className="auth-layout__content">
         <div className="auth-layout__form-wrapper">

@@ -16,10 +16,9 @@ const Navbar = ({ forcesolid, isAuth }) => {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category');
   const isCategoryHero = location.pathname === '/products' && (category === 'men' || category === 'women');
-
-  const solid = (forcesolid && !isCategoryHero) || (!isHome && !isCategoryHero) || isScrolled;
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const solid = (forcesolid && !isCategoryHero && !isAuthPage) || (!isHome && !isCategoryHero && !isAuthPage) || isScrolled;
   let navClass = solid ? 'navbar--solid' : 'navbar--transparent';
-  if (isAuth) navClass = 'navbar--auth-dark';
 
   return (
     <>
