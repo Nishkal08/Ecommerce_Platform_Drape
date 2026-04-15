@@ -42,7 +42,7 @@ const AboutPage = () => {
             }
           `}} />
           <div style={{ height: '500px', background: 'var(--surface)' }}>
-            <img src="https://images.unsplash.com/photo-1558769132-cb1fac08cbc4?q=80&w=1200&auto=format&fit=crop" alt="Craftsmanship" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1200&auto=format&fit=crop" alt="Craftsmanship" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div style={{ padding: '0 20px' }}>
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '28px', marginBottom: '20px' }}>Our Craftsmanship</h3>
