@@ -28,7 +28,7 @@ const RegisterPage = () => {
   return (
     <div className="auth-layout">
       <div className="auth-layout__image">
-        <img src="https://images.unsplash.com/photo-1510832198440-a52376950479?q=80&w=1400&auto=format&fit=crop" alt="DRAPE Design" style={{ objectPosition: 'center 10%' }} />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Alia_Bhatt_at_Berlinale_2022_Ausschnitt.jpg/1280px-Alia_Bhatt_at_Berlinale_2022_Ausschnitt.jpg" alt="Alia Bhatt DRAPE" style={{ objectPosition: 'center 20%' }} />
       </div>
       <div className="auth-layout__content">
         <div className="auth-layout__form-wrapper">
