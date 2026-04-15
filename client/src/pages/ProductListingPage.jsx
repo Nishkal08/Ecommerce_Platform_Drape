@@ -65,7 +65,7 @@ const ProductListingPage = () => {
           <img 
             src={category === 'men' ? '/men-hero.png' : category === 'women' ? '/women-hero.png' : '/accessories-hero.png'} 
             alt={`${category} collection`}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: category === 'women' ? 'center 15%' : 'center center' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: category === 'accessories' ? 'center center' : 'center 15%' }}
             loading="eager"
           />
           
