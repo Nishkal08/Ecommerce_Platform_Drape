@@ -922,6 +922,7 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
 .page {
   min-height: calc(100vh - 64px);
   padding-top: 64px;
+  overflow-x: hidden;
 }
 
 .page-header {
@@ -937,6 +938,7 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   padding: 32px 48px;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 /* Product grid */
@@ -2685,6 +2687,7 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   padding: 20px 0;
   border-bottom: 1px dashed var(--border);
   position: relative;
+  overflow: hidden;
 }
 
 .cart-row__image-link {
@@ -2711,6 +2714,8 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .cart-row__name {
@@ -2721,6 +2726,9 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   text-decoration: none;
   transition: color 0.2s;
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cart-row__name:hover {
@@ -2745,6 +2753,8 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   align-items: center;
   gap: 16px;
   justify-self: start;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .cart-row__total {
@@ -3173,6 +3183,7 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   margin-top: 48px;
   padding-top: 32px;
   border-top: none;
+  overflow: hidden;
 }
 
 .complete-look__title {

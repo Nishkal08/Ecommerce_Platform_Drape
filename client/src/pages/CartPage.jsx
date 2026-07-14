@@ -137,9 +137,9 @@ const CartPage = () => {
         {/* Stitch line divider (#2) */}
         <hr className="divider--stitch" />
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12" style={{ overflow: 'hidden' }}>
           {/* Cart Items List */}
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full min-w-0 overflow-hidden">
             {cart.items.map((item) => {
               const priceDiff = item.priceAtAdd && item.product?.price
                 ? item.priceAtAdd - item.product.price
