@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { HiTrash } from 'react-icons/hi';
+import { HiOutlineTrash, HiOutlineLockClosed, HiOutlineRefresh } from 'react-icons/hi';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { validateCoupon } from '../services/couponService';
@@ -15,6 +15,7 @@ const CartPage = () => {
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [showPromo, setShowPromo] = useState(false);
 
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) return;
@@ -39,10 +40,18 @@ const CartPage = () => {
     navigate('/checkout', { state: { couponApplied: appliedCoupon ? { code: appliedCoupon.code, discount: couponDiscount } : null } });
   };
 
+  const itemCount = cart.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+
   if (!cart.items || cart.items.length === 0) {
     return (
       <div className="page">
         <div className="page-content">
+          {/* Breadcrumb */}
+          <div className="breadcrumb">
+            <Link to="/">Home</Link>
+            <span className="breadcrumb__separator">/</span>
+            <span>Cart</span>
+          </div>
           <div className="empty-state">
             <div className="empty-state__icon">🛍️</div>
             <h3>Your cart is empty</h3>
@@ -56,82 +65,136 @@ const CartPage = () => {
 
   return (
     <div className="page">
-      <div className="page-header"><h1>Shopping Cart</h1></div>
       <div className="page-content">
+        {/* Breadcrumb */}
+        <div className="breadcrumb">
+          <Link to="/">Home</Link>
+          <span className="breadcrumb__separator">/</span>
+          <span>Cart</span>
+        </div>
+
+        {/* Page Header */}
+        <div className="page-header--editorial">
+          <h1>Shopping Cart</h1>
+          <span className="page-header__meta">
+            {itemCount} {itemCount === 1 ? 'Item' : 'Items'}
+          </span>
+        </div>
+
+        {/* Stitch line divider */}
+        <hr className="divider--stitch" />
+
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-          {/* Cart Items */}
+          {/* Cart Items List */}
           <div className="flex-1 w-full">
             {cart.items.map((item) => (
-              <div key={item._id} style={{ display: 'flex', gap: '20px', padding: '20px 0', borderBottom: '1px solid var(--border)' }}>
-                <Link to={`/products/${item.product?.slug}`}>
-                  <img src={item.product?.images?.[0]?.url} alt={item.product?.name} style={{ width: '100px', height: '130px', objectFit: 'cover', borderRadius: '4px' }} />
+              <div key={item._id} className="cart-row">
+                <Link to={`/products/${item.product?.slug}`} className="cart-row__image-link">
+                  <img 
+                    src={item.product?.images?.[0]?.url} 
+                    alt={item.product?.name} 
+                    className="cart-row__image" 
+                  />
                 </Link>
-                <div style={{ flex: 1 }}>
-                  <Link to={`/products/${item.product?.slug}`} style={{ fontSize: '15px', fontWeight: '500' }}>
+                
+                <div className="cart-row__info">
+                  <Link to={`/products/${item.product?.slug}`} className="cart-row__name">
                     {item.product?.name}
                   </Link>
-                  {item.size && <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>Size: {item.size}</p>}
-                  <p style={{ fontWeight: '600', marginTop: '8px' }}>{formatPrice(item.product?.price)}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '12px' }}>
-                    <div className="qty-stepper">
-                      <button onClick={() => item.quantity > 1 && updateItem(item._id, item.quantity - 1)}>−</button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => updateItem(item._id, item.quantity + 1)}>+</button>
-                    </div>
-                    <button onClick={() => removeItem(item._id)} style={{ background: 'none', border: 'none', color: 'var(--error)', fontSize: '16px', cursor: 'pointer' }}>
-                      <HiTrash />
-                    </button>
-                  </div>
+                  {item.size && <span className="cart-row__meta">Size: {item.size}</span>}
+                  <span className="cart-row__price">{formatPrice(item.product?.price)}</span>
                 </div>
-                <div style={{ fontWeight: '600' }}>
+                
+                <div className="cart-row__controls">
+                  <div className="qty-stepper--unified">
+                    <button onClick={() => item.quantity > 1 && updateItem(item._id, item.quantity - 1)}>−</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => updateItem(item._id, item.quantity + 1)}>+</button>
+                  </div>
+                  <button onClick={() => removeItem(item._id)} className="cart-row__remove" title="Remove item">
+                    <HiOutlineTrash />
+                  </button>
+                </div>
+                
+                <div className="cart-row__total">
                   {formatPrice((item.product?.price || 0) * item.quantity)}
                 </div>
               </div>
             ))}
-            <button onClick={clearAllItems} className="btn btn--outline btn--sm" style={{ marginTop: '16px' }}>
-              Clear Cart
-            </button>
+            
+            <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+              <button onClick={clearAllItems} className="btn btn--outline btn--sm">
+                Clear Cart
+              </button>
+              <Link to="/products" className="btn btn--outline btn--sm" style={{ textDecoration: 'none' }}>
+                Continue Shopping
+              </Link>
+            </div>
           </div>
 
-          {/* Order Summary */}
-          <div className="w-full lg:w-[380px] flex-shrink-0" style={{ background: 'var(--surface)', borderRadius: '8px', padding: '32px', height: 'fit-content', position: 'sticky', top: '96px' }}>
-            <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: '600', marginBottom: '24px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Order Summary
-            </h3>
+          {/* Sticky Order Summary & Trust Strip */}
+          <div className="w-full lg:w-[380px] flex-shrink-0">
+            <div className="cart-summary-card--sticky">
+              <h3 className="cart-summary-card__title">Order Summary</h3>
 
-            {/* Coupon */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
-              <input
-                className="form-input"
-                placeholder="Coupon code"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                style={{ flex: 1 }}
-              />
-              <button className="btn btn--outline btn--sm" onClick={handleApplyCoupon}>Apply</button>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '14px' }}>
-              <span style={{ color: 'var(--muted)' }}>Subtotal</span>
-              <span>{formatPrice(cartTotal)}</span>
-            </div>
-            {couponDiscount > 0 && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '14px', color: 'var(--success)' }}>
-                <span>Discount ({appliedCoupon?.code})</span>
-                <span>-{formatPrice(couponDiscount)}</span>
+              {/* Collapsible Coupon Reveal */}
+              <div>
+                <button 
+                  className="promo-toggle-link" 
+                  onClick={() => setShowPromo(!showPromo)}
+                >
+                  {showPromo ? 'Hide promo code' : 'Have a promo code?'}
+                </button>
+                <div className={`promo-panel-collapsible ${showPromo ? 'promo-panel-collapsible--open' : ''}`}>
+                  <div className="coupon-input-group">
+                    <input
+                      placeholder="Enter code"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                    />
+                    <button className="coupon-input-group__btn" onClick={handleApplyCoupon}>Apply</button>
+                  </div>
+                </div>
               </div>
-            )}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '14px' }}>
-              <span style={{ color: 'var(--muted)' }}>Shipping</span>
-              <span style={{ color: 'var(--success)' }}>Free</span>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
+                <span style={{ color: 'var(--muted)' }}>Subtotal</span>
+                <span style={{ fontWeight: '500' }}>{formatPrice(cartTotal)}</span>
+              </div>
+              
+              {couponDiscount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px', color: 'var(--success)' }}>
+                  <span>Discount ({appliedCoupon?.code})</span>
+                  <span style={{ fontWeight: '500' }}>-{formatPrice(couponDiscount)}</span>
+                </div>
+              )}
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontSize: '13px' }}>
+                <span style={{ color: 'var(--muted)' }}>Shipping</span>
+                <span style={{ color: 'var(--success)', fontWeight: '500' }}>Free</span>
+              </div>
+              
+              <div className="cart-summary-card__row-total">
+                <span>Total</span>
+                <span>{formatPrice(Math.max(cartTotal - couponDiscount, 0))}</span>
+              </div>
+              
+              <button className="btn btn--primary btn--full btn--lg" onClick={handleCheckout} style={{ marginTop: '24px' }}>
+                Proceed to Checkout
+              </button>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0', borderTop: '1px solid var(--border)', marginTop: '12px', fontWeight: '700', fontSize: '18px' }}>
-              <span>Total</span>
-              <span>{formatPrice(Math.max(cartTotal - couponDiscount, 0))}</span>
+
+            {/* Secure Strip / Trust Strip */}
+            <div className="trust-strip">
+              <div className="trust-item">
+                <HiOutlineLockClosed />
+                <span>Secure Checkout powered by SSL encryption</span>
+              </div>
+              <div className="trust-item">
+                <HiOutlineRefresh />
+                <span>Complimentary 14-day hassle-free returns</span>
+              </div>
             </div>
-            <button className="btn btn--primary btn--full btn--lg" onClick={handleCheckout}>
-              Proceed to Checkout
-            </button>
           </div>
         </div>
       </div>
