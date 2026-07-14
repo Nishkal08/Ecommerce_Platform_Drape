@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   HiOutlineViewGrid,
@@ -45,11 +45,14 @@ const AdminSidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile overlay */}
-      <div
-        className={`admin-sidebar-overlay ${isOpen ? 'admin-sidebar-overlay--open' : ''}`}
-        onClick={onClose}
-      />
+      {/* Mobile overlay — portalled to body so it doesn't break the admin-layout grid */}
+      {createPortal(
+        <div
+          className={`admin-sidebar-overlay ${isOpen ? 'admin-sidebar-overlay--open' : ''}`}
+          onClick={onClose}
+        />,
+        document.body
+      )}
 
       <aside className={`admin-sidebar ${isOpen ? 'admin-sidebar--open' : ''}`}>
         {/* Brand */}

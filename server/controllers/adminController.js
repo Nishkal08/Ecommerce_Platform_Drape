@@ -64,7 +64,7 @@ exports.getUsers = async (req, res, next) => {
 exports.getChartData = async (req, res, next) => {
   try {
     const period = req.query.period || '7d';
-    let startDate, groupFormat, dateProject;
+    let startDate, groupFormat;
 
     const now = new Date();
 
@@ -89,7 +89,7 @@ exports.getChartData = async (req, res, next) => {
           revenue: {
             $sum: {
               $cond: [
-                { $nin: ['$status', ['cancelled', 'pending']] },
+                { $not: [{ $in: ['$status', ['cancelled', 'pending']] }] },
                 '$total',
                 0,
               ],

@@ -103,7 +103,7 @@ function App() {
         toastOptions={{
           duration: 3500,
           style: {
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: '12px',
             fontWeight: '500',
             borderRadius: '6px',

@@ -34,7 +34,7 @@ const ChartTooltip = ({ active, payload, label, formatter }) => {
       padding: '10px 14px',
       borderRadius: '6px',
       fontSize: '12px',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'DM Sans', sans-serif",
       boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
       border: '1px solid rgba(255,255,255,0.05)',
     }}>
@@ -204,13 +204,13 @@ const DashboardPage = () => {
                     dataKey="label"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'Inter' }}
+                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'DM Sans' }}
                     dy={8}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'Inter' }}
+                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'DM Sans' }}
                     tickFormatter={(v) => v >= 1000 ? `₹${(v / 1000).toFixed(0)}k` : `₹${v}`}
                   />
                   <Tooltip content={<ChartTooltip formatter={(v) => formatPrice(v)} />} />
@@ -252,13 +252,13 @@ const DashboardPage = () => {
                     dataKey="label"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'Inter' }}
+                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'DM Sans' }}
                     dy={8}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'Inter' }}
+                    tick={{ fontSize: 11, fill: '#6B6860', fontFamily: 'DM Sans' }}
                     allowDecimals={false}
                   />
                   <Tooltip content={<ChartTooltip />} />
