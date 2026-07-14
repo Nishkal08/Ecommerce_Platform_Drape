@@ -117,7 +117,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="page">
+    <div className="page bg-[#FAF9F6]">
       <div className="page-content">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -137,136 +137,152 @@ const CartPage = () => {
         {/* Stitch line divider (#2) */}
         <hr className="divider--stitch" />
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12" style={{ overflow: 'hidden' }}>
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
           {/* Cart Items List */}
-          <div className="flex-1 w-full min-w-0 overflow-hidden">
+          <div className="flex-1 w-full min-w-0">
             {cart.items.map((item) => {
               const priceDiff = item.priceAtAdd && item.product?.price
                 ? item.priceAtAdd - item.product.price
                 : 0;
 
               return (
-                <div key={item._id} className="cart-row" style={{ position: 'relative' }}>
+                <div key={item._id} className="flex gap-6 py-6 border-b border-black/5 relative">
                   {/* Loading overlay (#18) */}
                   {updatingItemId === item._id && (
-                    <div className="cart-row__loading">
+                    <div className="absolute inset-0 bg-[#FAF9F6]/70 backdrop-blur-[1px] flex items-center justify-center z-10">
                       <div className="spinner-small" />
                     </div>
                   )}
 
-                  <Link to={`/products/${item.product?.slug}`} className="cart-row__image-link">
+                  {/* Left: Product Image */}
+                  <Link to={`/products/${item.product?.slug}`} className="w-24 h-32 md:w-28 md:h-36 bg-black/[0.02] overflow-hidden flex-shrink-0 border border-black/5">
                     <img
                       src={item.product?.images?.[0]?.url}
                       alt={item.product?.name}
-                      className="cart-row__image"
+                      className="w-full h-full object-cover"
                     />
                   </Link>
 
-                  <div className="cart-row__info">
-                    <Link to={`/products/${item.product?.slug}`} className="cart-row__name">
-                      {item.product?.name}
-                    </Link>
-
-                    {/* Inline Size Edit (#10) */}
-                    {item.product?.sizes?.length > 0 ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="cart-row__meta">Size:</span>
-                        <select
-                          className="cart-row__size-select"
-                          value={item.size || ''}
-                          onChange={(e) => updateItemSize(item._id, e.target.value)}
-                          aria-label={`Change size for ${item.product?.name}`}
-                        >
-                          {item.product.sizes.map(s => (
-                            <option key={s} value={s}>{s}</option>
-                          ))}
-                        </select>
+                  {/* Center: Details */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
+                    <div>
+                      {/* Category */}
+                      <div className="text-[10px] font-sans font-semibold tracking-wider text-black/35 uppercase">
+                        {item.product?.category || 'Women'}
                       </div>
-                    ) : (
-                      item.size && <span className="cart-row__meta">Size: {item.size}</span>
-                    )}
-
-                    <span className="cart-row__price">{formatPrice(item.product?.price)}</span>
-
-                    {/* Price Drop Alert (#14) */}
-                    {priceDiff > 0 && (
-                      <div className="price-drop-badge">
-                        ↓ Price dropped {formatPrice(priceDiff)} since added
+                      {/* Title */}
+                      <Link to={`/products/${item.product?.slug}`} className="font-sans text-sm font-bold text-charcoal tracking-wide mt-0.5 hover:underline block truncate">
+                        {item.product?.name}
+                      </Link>
+                      {/* Sub-description (Fabric info fallback) */}
+                      <div className="text-[11px] font-sans text-black/40 mt-1 uppercase tracking-wider">
+                        {item.product?.fabric || '100% Merino Wool'}
                       </div>
-                    )}
 
-                    {/* Stock Urgency (#11) */}
-                    {item.product?.stock > 0 && item.product.stock <= 5 && (
-                      <div className="stock-badge">
-                        Only {item.product.stock} left
+                      {/* Size Selector */}
+                      <div className="text-[11px] font-sans text-black/50 mt-1.5 uppercase font-medium flex items-center gap-1.5">
+                        <span>Size:</span>
+                        {item.product?.sizes?.length > 0 ? (
+                          <select
+                            className="bg-transparent border-none p-0 pr-4 font-bold text-charcoal cursor-pointer outline-none font-sans uppercase tracking-wider"
+                            value={item.size || ''}
+                            onChange={(e) => updateItemSize(item._id, e.target.value)}
+                            aria-label={`Change size for ${item.product?.name}`}
+                          >
+                            {item.product.sizes.map(s => (
+                              <option key={s} value={s}>{s}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span className="font-bold text-charcoal">{item.size || 'FREE'}</span>
+                        )}
                       </div>
-                    )}
+                    </div>
 
-                    {/* Delivery Estimate (#13) */}
-                    <div className="delivery-estimate">
-                      <HiOutlineTruck style={{ fontSize: '13px' }} />
-                      Arrives by {estimatedDate}
+                    {/* Controls (Stepper, Save, Remove) */}
+                    <div className="flex items-center gap-6 mt-4 flex-wrap">
+                      {/* Stepper */}
+                      <div className="flex items-center border border-black/10 rounded-md bg-[#FAF9F6] h-8 text-xs overflow-hidden">
+                        <button
+                          onClick={() => item.quantity > 1 && updateItem(item._id, item.quantity - 1)}
+                          className="px-3 h-full hover:bg-black/5 transition-colors font-medium border-none bg-transparent cursor-pointer"
+                          aria-label={`Decrease quantity of ${item.product?.name}`}
+                        >−</button>
+                        <span className="px-2 font-medium min-w-[24px] text-center">{item.quantity}</span>
+                        <button
+                          onClick={() => updateItem(item._id, item.quantity + 1)}
+                          className="px-3 h-full hover:bg-black/5 transition-colors font-medium border-none bg-transparent cursor-pointer"
+                          aria-label={`Increase quantity of ${item.product?.name}`}
+                        >+</button>
+                      </div>
+
+                      {/* Save for later */}
+                      <button
+                        onClick={() => handleSaveForLater(item)}
+                        className="text-[11px] font-sans font-bold tracking-wider uppercase text-black/40 hover:text-charcoal transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer"
+                        title="Move to wishlist"
+                        aria-label={`Save ${item.product?.name} for later`}
+                      >
+                        <HiOutlineHeart size={14} /> Save For Later
+                      </button>
+
+                      {/* Remove */}
+                      <button
+                        onClick={() => removeItemWithUndo(item._id)}
+                        className="text-[11px] font-sans font-bold tracking-wider uppercase text-black/40 hover:text-red-500 transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer"
+                        title="Remove item"
+                        aria-label={`Remove ${item.product?.name} from cart`}
+                      >
+                        <HiOutlineTrash size={14} /> Remove
+                      </button>
+                    </div>
+
+                    {/* Urgency indicators */}
+                    <div className="mt-3.5 space-y-1.5">
+                      {priceDiff > 0 && (
+                        <div className="text-[11px] font-sans font-semibold text-green-600 uppercase tracking-wide">
+                          ↓ Price dropped {formatPrice(priceDiff)} since added
+                        </div>
+                      )}
+                      {item.product?.stock > 0 && item.product.stock <= 5 && (
+                        <div className="text-[11px] font-sans font-semibold text-red-500 uppercase tracking-wide">
+                          Only {item.product.stock} pieces left in stock
+                        </div>
+                      )}
+                      <div className="text-[11px] font-sans text-black/40 flex items-center gap-1.5 uppercase tracking-wider">
+                        <HiOutlineTruck size={13} /> Arrives by {estimatedDate}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="cart-row__controls">
-                    <div className="qty-stepper--unified">
-                      <button
-                        onClick={() => item.quantity > 1 && updateItem(item._id, item.quantity - 1)}
-                        aria-label={`Decrease quantity of ${item.product?.name}`}
-                      >−</button>
-                      <span>{item.quantity}</span>
-                      <button
-                        onClick={() => updateItem(item._id, item.quantity + 1)}
-                        aria-label={`Increase quantity of ${item.product?.name}`}
-                      >+</button>
-                    </div>
-
-                    {/* Save for Later (#12) */}
-                    <button
-                      onClick={() => handleSaveForLater(item)}
-                      className="cart-row__save-later"
-                      title="Move to wishlist"
-                      aria-label={`Save ${item.product?.name} for later`}
-                    >
-                      <HiOutlineHeart style={{ display: 'inline', marginRight: '3px', verticalAlign: 'middle', fontSize: '13px' }} />
-                      Save
-                    </button>
-
-                    {/* Delete with Undo (#9) */}
-                    <button
-                      onClick={() => removeItemWithUndo(item._id)}
-                      className="cart-row__remove"
-                      title="Remove item"
-                      aria-label={`Remove ${item.product?.name} from cart`}
-                    >
-                      <HiOutlineTrash />
-                    </button>
-                  </div>
-
-                  <div className="cart-row__total">
-                    {formatPrice((item.product?.price || 0) * item.quantity)}
+                  {/* Right: Total Price */}
+                  <div className="text-right flex flex-col justify-start py-1">
+                    <span className="font-sans text-sm font-bold text-charcoal tracking-wide">
+                      {formatPrice((item.product?.price || 0) * item.quantity)}
+                    </span>
                   </div>
                 </div>
               );
             })}
 
-            {/* Button Hierarchy (#6) */}
-            <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
-              <button onClick={clearAllItems} className="btn btn--destructive-muted btn--sm">
+            {/* Layout Footer Controls */}
+            <div className="flex gap-4 mt-8">
+              <button onClick={clearAllItems} className="btn btn--destructive-muted btn--sm text-[10px] tracking-wider uppercase font-bold py-2.5 px-6">
                 Clear Cart
               </button>
-              <Link to="/products" className="btn btn--outline btn--sm" style={{ textDecoration: 'none' }}>
+              <Link to="/products" className="btn btn--outline btn--sm text-[10px] tracking-wider uppercase font-bold py-2.5 px-6" style={{ textDecoration: 'none' }}>
                 Continue Shopping
               </Link>
             </div>
 
-            {/* Complete the Look (#3b) */}
+            {/* Complete the Look Section */}
             {recommendations.length > 0 && (
-              <div className="complete-look">
+              <div className="mt-16">
                 <hr className="divider--stitch" />
-                <h3 className="complete-look__title">Complete the Look</h3>
-                <div className="complete-look__strip">
+                <h3 className="font-sans text-[11px] font-bold tracking-widest uppercase text-black/45 mb-8">
+                  Complete the Silhouette
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                   {recommendations.map(p => (
                     <ProductCard key={p._id} product={p} />
                   ))}
@@ -275,100 +291,97 @@ const CartPage = () => {
             )}
           </div>
 
-          {/* Sticky Order Summary & Trust Strip */}
+          {/* Right Side: Sticky Order Summary */}
           <div className="w-full lg:w-[380px] flex-shrink-0">
-            <div className="sticky-sidebar">
-              <div className="cart-summary-card">
-                <h3 className="cart-summary-card__title">Order Summary</h3>
+            <div className="sticky-sidebar space-y-6">
+              {/* Summary Card */}
+              <div className="bg-[#EAE6DC]/35 p-8 rounded-lg border border-black/5 flex flex-col">
+                <h3 className="font-sans text-xs font-bold tracking-widest uppercase text-charcoal border-b border-black/5 pb-4 mb-6">
+                  Summary
+                </h3>
 
-                {/* Collapsible Coupon Reveal */}
-                <div>
-                  <button
-                    className="promo-toggle-link"
-                    onClick={() => setShowPromo(!showPromo)}
-                    aria-label={showPromo ? 'Hide promo code input' : 'Show promo code input'}
-                    aria-expanded={showPromo}
-                  >
-                    {showPromo ? 'Hide promo code' : 'Have a promo code?'}
-                  </button>
-                  <div className={`promo-panel-collapsible ${showPromo ? 'promo-panel-collapsible--open' : ''}`}>
-                    <div className="coupon-input-group">
-                      <input
-                        placeholder="Enter code"
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
-                        aria-label="Promo code"
-                      />
-                      <button
-                        className="coupon-input-group__btn"
-                        onClick={handleApplyCoupon}
-                        disabled={applyingCoupon}
-                      >
-                        {applyingCoupon ? '...' : 'Apply'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
-                  <span style={{ color: 'var(--muted)' }}>Subtotal</span>
-                  <span style={{ fontWeight: '500' }}>{formatPrice(cartTotal)}</span>
+                <div className="flex justify-between items-center text-xs text-black/50 mb-4">
+                  <span>Subtotal</span>
+                  <span className="font-sans font-bold text-charcoal">{formatPrice(cartTotal)}</span>
                 </div>
 
                 {couponDiscount > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px', color: 'var(--success)' }}>
+                  <div className="flex justify-between items-center text-xs text-green-600 mb-4">
                     <span>Discount ({appliedCoupon?.code})</span>
-                    <span style={{ fontWeight: '500' }}>-{formatPrice(couponDiscount)}</span>
+                    <span className="font-sans font-bold">-{formatPrice(couponDiscount)}</span>
                   </div>
                 )}
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
-                  <span style={{ color: 'var(--muted)' }}>Shipping</span>
-                  <span style={{ color: 'var(--success)', fontWeight: '500' }}>Free</span>
+                <div className="flex justify-between items-center text-xs text-black/50 mb-4">
+                  <span>Shipping</span>
+                  <span className="font-sans font-bold text-green-600 uppercase tracking-wider text-[11px]">Free</span>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '13px' }}>
-                  <span style={{ color: 'var(--muted)' }}>Estimated Delivery</span>
-                  <span style={{ fontWeight: '500' }}>{estimatedDate}</span>
+                <div className="flex justify-between items-center text-xs text-black/50 mb-6">
+                  <span>Estimated Delivery</span>
+                  <span className="font-sans font-bold text-charcoal">{estimatedDate}</span>
                 </div>
 
-                <div className="cart-summary-card__row-total">
-                  <span>Total</span>
-                  <span>{formatPrice(Math.max(cartTotal - couponDiscount, 0))}</span>
+                {/* Promo Input Box */}
+                <div className="flex border border-black/10 rounded-md bg-white overflow-hidden mb-6 h-10">
+                  <input
+                    placeholder="Promo Code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    className="flex-1 px-3 bg-transparent border-none outline-none font-sans text-[11px] placeholder-black/30 tracking-wider uppercase font-bold text-charcoal"
+                    aria-label="Promo code"
+                  />
+                  <button
+                    onClick={handleApplyCoupon}
+                    disabled={applyingCoupon}
+                    className="px-4 bg-transparent border-none font-sans text-[10px] font-bold tracking-wider text-charcoal uppercase hover:bg-black/5 cursor-pointer transition-colors border-l border-black/5"
+                  >
+                    {applyingCoupon ? '...' : 'Apply'}
+                  </button>
+                </div>
+
+                <div className="flex justify-between items-baseline border-t border-black/5 pt-6 mt-2 mb-8">
+                  <span className="font-sans text-xs font-bold tracking-widest text-charcoal uppercase">Total</span>
+                  <span className="font-sans text-2xl font-bold text-charcoal">
+                    {formatPrice(Math.max(cartTotal - couponDiscount, 0))}
+                  </span>
                 </div>
 
                 <button
-                  className="btn btn--primary btn--full btn--lg"
+                  className="w-full bg-[#1A1A1A] hover:bg-black text-white py-3.5 px-6 rounded-md font-sans text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.99]"
                   onClick={handleCheckout}
-                  style={{ marginTop: '24px' }}
                 >
-                  Proceed to Checkout
+                  Secure Checkout &nbsp; →
                 </button>
+
+                <div className="text-[10px] font-sans text-black/35 tracking-wider uppercase leading-relaxed text-center mt-6">
+                  COMPLIMENTARY SHIPPING ON ARCHIVAL ORDERS OVER ₹15,000. RETURNS ACCEPTED WITHIN 14 DAYS.
+                </div>
               </div>
 
-              {/* Secure Strip / Trust Strip */}
-              <div className="trust-strip">
-                <div className="trust-item">
-                  <HiOutlineLockClosed />
+              {/* Secure Info Strip */}
+              <div className="trust-strip p-4 bg-white border border-black/5 rounded-lg space-y-3">
+                <div className="trust-item flex items-center gap-3 text-xs text-black/50">
+                  <HiOutlineLockClosed size={16} />
                   <span>Secure Checkout powered by SSL encryption</span>
                 </div>
-                <div className="trust-item">
-                  <HiOutlineRefresh />
+                <div className="trust-item flex items-center gap-3 text-xs text-black/50">
+                  <HiOutlineRefresh size={16} />
                   <span>Complimentary 14-day hassle-free returns</span>
                 </div>
-                <div className="trust-item">
-                  <HiOutlineTruck />
+                <div className="trust-item flex items-center gap-3 text-xs text-black/50">
+                  <HiOutlineTruck size={16} />
                   <span>Free express shipping on all orders</span>
                 </div>
               </div>
 
-              {/* Need Help? Block (#3c) */}
-              <div className="help-block">
-                <div className="help-block__title">Need Help?</div>
-                <div className="help-block__text">
+              {/* Need Help? Block */}
+              <div className="help-block p-6 bg-white border border-black/5 rounded-lg">
+                <div className="help-block__title font-sans text-xs font-bold tracking-widest uppercase text-charcoal mb-2">Need Help?</div>
+                <div className="help-block__text text-xs text-black/40 leading-relaxed mb-4">
                   Our styling experts are here to assist you with sizing, fit, and recommendations.
                 </div>
-                <Link to="/contact" className="help-block__link">Contact Support →</Link>
+                <Link to="/contact" className="help-block__link text-xs font-bold text-charcoal hover:underline">Contact Support →</Link>
               </div>
             </div>
           </div>
