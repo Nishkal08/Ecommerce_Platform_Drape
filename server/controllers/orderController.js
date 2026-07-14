@@ -67,18 +67,32 @@ exports.createOrder = async (req, res, next) => {
     // Create Razorpay order
     let razorpayOrder;
     try {
+      console.log('Creating Razorpay order on backend:');
+      console.log('  Amount (paise):', Math.round(total * 100));
+      console.log('  Currency: INR');
+      console.log('  Key ID used:', process.env.RAZORPAY_KEY_ID);
+
       razorpayOrder = await razorpay.orders.create({
         amount: Math.round(total * 100), // paise
         currency: 'INR',
         receipt: `order_${Date.now()}`,
       });
+      
+      console.log('Razorpay Orders API success response:', {
+        id: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        status: razorpayOrder.status,
+      });
     } catch (rpError) {
+      console.error('RAZORPAY ORDERS API CALL FAILED:', rpError);
       // If Razorpay keys are placeholder, create a mock order for development
       razorpayOrder = {
         id: `dev_order_${Date.now()}`,
         amount: Math.round(total * 100),
         currency: 'INR',
       };
+      console.log('Fell back to dev mock order ID:', razorpayOrder.id);
     }
 
     const order = await Order.create({

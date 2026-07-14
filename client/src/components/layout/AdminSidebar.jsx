@@ -55,7 +55,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       )}
 
       <aside
-        className={`fixed md:sticky top-16 left-0 z-40 w-[260px] h-[calc(100vh-64px)] bg-gradient-to-b from-[#0D0D0D] to-[#111111] text-white border-r border-white/5 flex flex-col py-7 overflow-y-auto transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed md:relative top-16 md:top-0 left-0 z-40 w-[260px] h-[calc(100vh-64px)] md:h-full bg-gradient-to-b from-[#0D0D0D] to-[#111111] text-white border-r border-white/5 flex flex-col py-7 overflow-y-auto transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         {/* Brand */}
         <div className="px-6 mb-9">

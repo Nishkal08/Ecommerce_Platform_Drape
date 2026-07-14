@@ -85,20 +85,18 @@ const AdminRoute = () => {
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/" replace />;
   return (
-    <div className="page">
-      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] min-h-[calc(100vh-64px)] w-full">
-        <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="p-6 md:p-10 bg-[#F7F6F3] min-h-[calc(100vh-64px)] min-w-0 overflow-y-auto">
-          <Outlet />
-        </div>
-        <button
-          className="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center z-50 md:hidden shadow-lg border border-white/10 active:scale-95 transition-transform"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          aria-label="Toggle Sidebar"
-        >
-          <HiOutlineMenu size={20} />
-        </button>
+    <div className="fixed inset-x-0 bottom-0 top-16 flex overflow-hidden bg-[#F7F6F3]">
+      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 min-w-0 h-full overflow-y-auto p-6 md:p-10">
+        <Outlet />
       </div>
+      <button
+        className="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center z-50 md:hidden shadow-lg border border-white/10 active:scale-95 transition-transform"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle Sidebar"
+      >
+        <HiOutlineMenu size={20} />
+      </button>
     </div>
   );
 };
