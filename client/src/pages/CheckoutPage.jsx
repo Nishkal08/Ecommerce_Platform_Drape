@@ -121,6 +121,9 @@ const CheckoutPage = () => {
         return;
       }
 
+      // Sanitize phone number to a clean 10-digit format for Razorpay SMS/OTP flow
+      const cleanContact = (address.phone || '').replace(/\D/g, '').slice(-10);
+
       // Production Razorpay Flow
       const options = {
         key: key_id,
@@ -145,7 +148,7 @@ const CheckoutPage = () => {
             toast.error('Payment verification failed');
           }
         },
-        prefill: { name: address.name, contact: address.phone },
+        prefill: { name: address.name, contact: cleanContact },
         theme: { color: '#B05C42' },
       };
 

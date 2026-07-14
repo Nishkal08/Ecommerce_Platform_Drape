@@ -54,6 +54,9 @@ const OrderDetailPage = () => {
         return;
       }
 
+      // Sanitize phone number to a clean 10-digit format for Razorpay SMS/OTP flow
+      const cleanContact = (order.shippingAddress?.phone || '').replace(/\D/g, '').slice(-10);
+
       // Production: Open Razorpay modal
       const options = {
         key: key_id,
@@ -77,7 +80,7 @@ const OrderDetailPage = () => {
             toast.error('Payment verification failed');
           }
         },
-        prefill: { name: order.shippingAddress?.name, contact: order.shippingAddress?.phone },
+        prefill: { name: order.shippingAddress?.name, contact: cleanContact },
         theme: { color: '#B05C42' },
       };
 
