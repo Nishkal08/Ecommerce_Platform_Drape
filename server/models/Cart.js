@@ -16,6 +16,10 @@ const cartItemSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  priceAtAdd: {
+    type: Number,
+    default: 0,
+  },
 }, { _id: true });
 
 const cartSchema = new mongoose.Schema({

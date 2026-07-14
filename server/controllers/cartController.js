@@ -39,7 +39,7 @@ exports.addItem = async (req, res, next) => {
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
-      cart.items.push({ product: productId, quantity, size });
+      cart.items.push({ product: productId, quantity, size, priceAtAdd: product.price });
     }
 
     await cart.save();
@@ -54,7 +54,7 @@ exports.addItem = async (req, res, next) => {
 // @route   PUT /api/cart/:itemId
 exports.updateItem = async (req, res, next) => {
   try {
-    const { quantity } = req.body;
+    const { quantity, size } = req.body;
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
       return sendResponse(res, 404, false, null, 'Cart not found');
@@ -65,7 +65,8 @@ exports.updateItem = async (req, res, next) => {
       return sendResponse(res, 404, false, null, 'Item not found in cart');
     }
 
-    item.quantity = quantity;
+    if (quantity !== undefined) item.quantity = quantity;
+    if (size !== undefined) item.size = size;
     await cart.save();
     await cart.populate('items.product');
     sendResponse(res, 200, true, cart, 'Cart updated');
