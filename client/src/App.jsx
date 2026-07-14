@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useAuth } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import AdminSidebar from './components/layout/AdminSidebar';
+import { HiOutlineMenu } from 'react-icons/hi';
 
 // Public pages
 import HomePage from './pages/HomePage';
@@ -72,16 +74,21 @@ const ProtectedRoute = () => {
 // Admin route wrapper
 const AdminRoute = () => {
   const { user, loading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   if (loading) return <div className="page"><div className="spinner spinner--center" /></div>;
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/" replace />;
   return (
     <div className="page">
       <div className="admin-layout">
-        <AdminSidebar />
+        <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="admin-content">
           <Outlet />
         </div>
+        <button className="admin-sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <HiOutlineMenu />
+        </button>
       </div>
     </div>
   );

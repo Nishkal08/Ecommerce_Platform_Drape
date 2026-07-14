@@ -1,6 +1,7 @@
 import api from './api';
 
 export const getDashboard = () => api.get('/admin/dashboard');
+export const getChartData = (period = '7d') => api.get('/admin/chart-data', { params: { period } });
 export const getUsers = () => api.get('/admin/users');
 export const getAllOrders = (params) => api.get('/orders', { params });
 export const updateOrderStatus = (id, data) => api.put(`/orders/${id}/status`, data);

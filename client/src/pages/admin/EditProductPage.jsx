@@ -80,60 +80,92 @@ const EditProductPage = () => {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '28px', marginBottom: '32px' }}>Edit Product</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: '640px' }}>
-        <div className="form-group">
-          <label>Product Name</label>
-          <input name="name" className="form-input" value={form.name} onChange={handleChange} required />
+      <div className="admin-page-header">
+        <div>
+          <h1 className="admin-page-title">Edit Product</h1>
+          <p className="admin-page-subtitle">{form.name}</p>
         </div>
-        <div className="form-group">
-          <label>Description</label>
-          <textarea name="description" className="form-input" rows={4} value={form.description} onChange={handleChange} required />
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+      </div>
+
+      <form onSubmit={handleSubmit} className="admin-form">
+        {/* Product Info Section */}
+        <div className="admin-form-section">
+          <div className="admin-form-section__title">Product Information</div>
           <div className="form-group">
-            <label>Price (₹)</label>
-            <input name="price" type="number" className="form-input" value={form.price} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>Compare Price</label>
-            <input name="comparePrice" type="number" className="form-input" value={form.comparePrice} onChange={handleChange} />
+            <label>Product Name</label>
+            <input name="name" className="form-input" value={form.name} onChange={handleChange} required />
           </div>
           <div className="form-group">
-            <label>Stock</label>
-            <input name="stock" type="number" className="form-input" value={form.stock} onChange={handleChange} required />
+            <label>Description</label>
+            <textarea name="description" className="form-input" rows={4} value={form.description} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label>Category</label>
+            <select name="category" className="form-input" value={form.category} onChange={handleChange}>
+              {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
           </div>
         </div>
-        <div className="form-group">
-          <label>Category</label>
-          <select name="category" className="form-input" value={form.category} onChange={handleChange}>
-            {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Image URL</label>
-          <input name="imageUrl" className="form-input" value={form.imageUrl} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Tags (comma-separated)</label>
-          <input name="tags" className="form-input" value={form.tags} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Sizes</label>
-          <div className="size-selector">
-            {SIZES.map(s => (
-              <button key={s} type="button" className={`size-btn ${form.sizes.includes(s) ? 'size-btn--active' : ''}`} onClick={() => toggleSize(s)}>
-                {s}
-              </button>
-            ))}
+
+        {/* Pricing Section */}
+        <div className="admin-form-section">
+          <div className="admin-form-section__title">Pricing & Inventory</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+            <div className="form-group">
+              <label>Price (₹)</label>
+              <input name="price" type="number" className="form-input" value={form.price} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label>Compare Price</label>
+              <input name="comparePrice" type="number" className="form-input" value={form.comparePrice} onChange={handleChange} />
+            </div>
+            <div className="form-group">
+              <label>Stock</label>
+              <input name="stock" type="number" className="form-input" value={form.stock} onChange={handleChange} required />
+            </div>
           </div>
         </div>
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-            <input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} />
-            <span style={{ fontSize: '14px' }}>Featured product</span>
-          </label>
+
+        {/* Media Section */}
+        <div className="admin-form-section">
+          <div className="admin-form-section__title">Media</div>
+          <div className="form-group">
+            <label>Image URL</label>
+            <input name="imageUrl" className="form-input" value={form.imageUrl} onChange={handleChange} />
+          </div>
+          {form.imageUrl && (
+            <div className="admin-image-preview">
+              <img src={form.imageUrl} alt="Preview" onError={(e) => e.target.style.display = 'none'} />
+            </div>
+          )}
         </div>
+
+        {/* Attributes Section */}
+        <div className="admin-form-section">
+          <div className="admin-form-section__title">Attributes</div>
+          <div className="form-group">
+            <label>Tags (comma-separated)</label>
+            <input name="tags" className="form-input" value={form.tags} onChange={handleChange} />
+          </div>
+          <div className="form-group">
+            <label>Sizes</label>
+            <div className="size-selector">
+              {SIZES.map(s => (
+                <button key={s} type="button" className={`size-btn ${form.sizes.includes(s) ? 'size-btn--active' : ''}`} onClick={() => toggleSize(s)}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} />
+              <span style={{ fontSize: '14px' }}>Featured product</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Actions */}
         <div style={{ display: 'flex', gap: '12px' }}>
           <button type="submit" className="btn btn--primary btn--lg" disabled={saving}>
             {saving ? 'Saving...' : 'Save Changes'}
