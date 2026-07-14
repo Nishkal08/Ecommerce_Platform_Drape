@@ -81,11 +81,20 @@ const AccountPage = () => {
 
   return (
     <div className="page">
-      <div className="page-header" style={{ marginBottom: '40px' }}>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '36px', fontWeight: '400', letterSpacing: '-0.02em' }}>My Account</h1>
-      </div>
-      
       <div className="page-content">
+        {/* Breadcrumb */}
+        <div className="breadcrumb">
+          <Link to="/">Home</Link>
+          <span className="breadcrumb__separator">/</span>
+          <span>Account</span>
+        </div>
+
+        {/* Page Header */}
+        <div className="page-header--editorial">
+          <h1>My Account</h1>
+          <span className="page-header__meta">Settings</span>
+        </div>
+        <hr className="divider--stitch" />
         <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '64px' }} className="account-grid">
           <style dangerouslySetInnerHTML={{__html: `
             @media (max-width: 768px) {

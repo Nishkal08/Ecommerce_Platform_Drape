@@ -128,13 +128,24 @@ const OrderDetailPage = () => {
         </div>
       )}
       <div className="page">
-        <div className="page-header">
-          <h1>Order #{order._id.slice(-8).toUpperCase()}</h1>
-          <p style={{ color: 'var(--muted)', fontSize: '13px', marginTop: '4px' }}>
-            Placed on {formatDateTime(order.createdAt)}
-          </p>
-        </div>
         <div className="page-content">
+          {/* Breadcrumb */}
+          <div className="breadcrumb">
+            <Link to="/">Home</Link>
+            <span className="breadcrumb__separator">/</span>
+            <Link to="/orders">Orders</Link>
+            <span className="breadcrumb__separator">/</span>
+            <span>Detail</span>
+          </div>
+
+          {/* Page Header */}
+          <div className="page-header--editorial">
+            <h1>Order #{order._id.slice(-8).toUpperCase()}</h1>
+            <span className="page-header__meta">
+              Placed on {formatDateTime(order.createdAt)}
+            </span>
+          </div>
+          <hr className="divider--stitch" />
           {/* Status Timeline */}
           {order.status !== 'cancelled' ? (
             <div className="status-timeline" style={{ marginBottom: '48px' }}>

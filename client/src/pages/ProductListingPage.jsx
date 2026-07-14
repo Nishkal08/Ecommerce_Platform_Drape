@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import ProductCard from '../components/ui/ProductCard';
 import { getProducts } from '../services/productService';
 import useDebounce from '../hooks/useDebounce';
@@ -95,11 +95,22 @@ const ProductListingPage = () => {
           </h1>
         </section>
       ) : (
-        <div className="page-header">
-          <h1>{category ? CATEGORIES.find(c => c.value === category)?.label || 'Products' : 'All Products'}</h1>
+        <div className="page-content" style={{ paddingBottom: 0 }}>
+          <div className="breadcrumb">
+            <Link to="/">Home</Link>
+            <span className="breadcrumb__separator">/</span>
+            <span>Shop</span>
+          </div>
+          <div className="page-header--editorial">
+            <h1>{category ? CATEGORIES.find(c => c.value === category)?.label || 'Products' : 'All Products'}</h1>
+            <span className="page-header__meta">
+              {products.length} {products.length === 1 ? 'Product' : 'Products'}
+            </span>
+          </div>
+          <hr className="divider--stitch" />
         </div>
       )}
-      <div className={`page-content ${isCategoryHero ? 'pt-0' : ''}`} style={isCategoryHero ? { maxWidth: '1440px', margin: '0 auto', padding: '0 48px' } : {}}>
+      <div className={`page-content ${isCategoryHero ? 'pt-0' : 'pt-0'}`} style={isCategoryHero ? { maxWidth: '1440px', margin: '0 auto', padding: '0 48px' } : {}}>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <aside className="w-full lg:w-64 flex-shrink-0 space-y-8">

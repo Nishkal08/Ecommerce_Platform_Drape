@@ -28,8 +28,20 @@ const OrderHistoryPage = () => {
 
   return (
     <div className="page">
-      <div className="page-header"><h1>My Orders</h1></div>
       <div className="page-content">
+        {/* Breadcrumb */}
+        <div className="breadcrumb">
+          <Link to="/">Home</Link>
+          <span className="breadcrumb__separator">/</span>
+          <span>Orders</span>
+        </div>
+
+        {/* Page Header */}
+        <div className="page-header--editorial">
+          <h1>My Orders</h1>
+          <span className="page-header__meta">History</span>
+        </div>
+        <hr className="divider--stitch" />
         {orders.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state__icon">📦</div>
