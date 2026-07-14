@@ -277,97 +277,99 @@ const CartPage = () => {
 
           {/* Sticky Order Summary & Trust Strip */}
           <div className="w-full lg:w-[380px] flex-shrink-0">
-            <div className="cart-summary-card--sticky">
-              <h3 className="cart-summary-card__title">Order Summary</h3>
+            <div className="sticky-sidebar">
+              <div className="cart-summary-card">
+                <h3 className="cart-summary-card__title">Order Summary</h3>
 
-              {/* Collapsible Coupon Reveal */}
-              <div>
-                <button
-                  className="promo-toggle-link"
-                  onClick={() => setShowPromo(!showPromo)}
-                  aria-label={showPromo ? 'Hide promo code input' : 'Show promo code input'}
-                  aria-expanded={showPromo}
-                >
-                  {showPromo ? 'Hide promo code' : 'Have a promo code?'}
-                </button>
-                <div className={`promo-panel-collapsible ${showPromo ? 'promo-panel-collapsible--open' : ''}`}>
-                  <div className="coupon-input-group">
-                    <input
-                      placeholder="Enter code"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      aria-label="Promo code"
-                    />
-                    <button
-                      className="coupon-input-group__btn"
-                      onClick={handleApplyCoupon}
-                      disabled={applyingCoupon}
-                    >
-                      {applyingCoupon ? '...' : 'Apply'}
-                    </button>
+                {/* Collapsible Coupon Reveal */}
+                <div>
+                  <button
+                    className="promo-toggle-link"
+                    onClick={() => setShowPromo(!showPromo)}
+                    aria-label={showPromo ? 'Hide promo code input' : 'Show promo code input'}
+                    aria-expanded={showPromo}
+                  >
+                    {showPromo ? 'Hide promo code' : 'Have a promo code?'}
+                  </button>
+                  <div className={`promo-panel-collapsible ${showPromo ? 'promo-panel-collapsible--open' : ''}`}>
+                    <div className="coupon-input-group">
+                      <input
+                        placeholder="Enter code"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        aria-label="Promo code"
+                      />
+                      <button
+                        className="coupon-input-group__btn"
+                        onClick={handleApplyCoupon}
+                        disabled={applyingCoupon}
+                      >
+                        {applyingCoupon ? '...' : 'Apply'}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
-                <span style={{ color: 'var(--muted)' }}>Subtotal</span>
-                <span style={{ fontWeight: '500' }}>{formatPrice(cartTotal)}</span>
-              </div>
-
-              {couponDiscount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px', color: 'var(--success)' }}>
-                  <span>Discount ({appliedCoupon?.code})</span>
-                  <span style={{ fontWeight: '500' }}>-{formatPrice(couponDiscount)}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
+                  <span style={{ color: 'var(--muted)' }}>Subtotal</span>
+                  <span style={{ fontWeight: '500' }}>{formatPrice(cartTotal)}</span>
                 </div>
-              )}
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
-                <span style={{ color: 'var(--muted)' }}>Shipping</span>
-                <span style={{ color: 'var(--success)', fontWeight: '500' }}>Free</span>
+                {couponDiscount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px', color: 'var(--success)' }}>
+                    <span>Discount ({appliedCoupon?.code})</span>
+                    <span style={{ fontWeight: '500' }}>-{formatPrice(couponDiscount)}</span>
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '13px' }}>
+                  <span style={{ color: 'var(--muted)' }}>Shipping</span>
+                  <span style={{ color: 'var(--success)', fontWeight: '500' }}>Free</span>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '13px' }}>
+                  <span style={{ color: 'var(--muted)' }}>Estimated Delivery</span>
+                  <span style={{ fontWeight: '500' }}>{estimatedDate}</span>
+                </div>
+
+                <div className="cart-summary-card__row-total">
+                  <span>Total</span>
+                  <span>{formatPrice(Math.max(cartTotal - couponDiscount, 0))}</span>
+                </div>
+
+                <button
+                  className="btn btn--primary btn--full btn--lg"
+                  onClick={handleCheckout}
+                  style={{ marginTop: '24px' }}
+                >
+                  Proceed to Checkout
+                </button>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '13px' }}>
-                <span style={{ color: 'var(--muted)' }}>Estimated Delivery</span>
-                <span style={{ fontWeight: '500' }}>{estimatedDate}</span>
+              {/* Secure Strip / Trust Strip */}
+              <div className="trust-strip">
+                <div className="trust-item">
+                  <HiOutlineLockClosed />
+                  <span>Secure Checkout powered by SSL encryption</span>
+                </div>
+                <div className="trust-item">
+                  <HiOutlineRefresh />
+                  <span>Complimentary 14-day hassle-free returns</span>
+                </div>
+                <div className="trust-item">
+                  <HiOutlineTruck />
+                  <span>Free express shipping on all orders</span>
+                </div>
               </div>
 
-              <div className="cart-summary-card__row-total">
-                <span>Total</span>
-                <span>{formatPrice(Math.max(cartTotal - couponDiscount, 0))}</span>
+              {/* Need Help? Block (#3c) */}
+              <div className="help-block">
+                <div className="help-block__title">Need Help?</div>
+                <div className="help-block__text">
+                  Our styling experts are here to assist you with sizing, fit, and recommendations.
+                </div>
+                <Link to="/contact" className="help-block__link">Contact Support →</Link>
               </div>
-
-              <button
-                className="btn btn--primary btn--full btn--lg"
-                onClick={handleCheckout}
-                style={{ marginTop: '24px' }}
-              >
-                Proceed to Checkout
-              </button>
-            </div>
-
-            {/* Secure Strip / Trust Strip */}
-            <div className="trust-strip">
-              <div className="trust-item">
-                <HiOutlineLockClosed />
-                <span>Secure Checkout powered by SSL encryption</span>
-              </div>
-              <div className="trust-item">
-                <HiOutlineRefresh />
-                <span>Complimentary 14-day hassle-free returns</span>
-              </div>
-              <div className="trust-item">
-                <HiOutlineTruck />
-                <span>Free express shipping on all orders</span>
-              </div>
-            </div>
-
-            {/* Need Help? Block (#3c) */}
-            <div className="help-block">
-              <div className="help-block__title">Need Help?</div>
-              <div className="help-block__text">
-                Our styling experts are here to assist you with sizing, fit, and recommendations.
-              </div>
-              <Link to="/contact" className="help-block__link">Contact Support →</Link>
             </div>
           </div>
         </div>

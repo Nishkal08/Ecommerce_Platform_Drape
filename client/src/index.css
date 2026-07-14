@@ -2824,7 +2824,24 @@ h3 { font-size: clamp(20px, 2.5vw, 28px); }
   transform: scale(1.1);
 }
 
-/* Summary Card Total block & sticky */
+/* Summary Card Total block & sticky column */
+.sticky-sidebar {
+  position: sticky;
+  top: 96px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-summary-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
 .cart-summary-card--sticky {
   background: var(--white);
   border: 1px solid var(--border);
