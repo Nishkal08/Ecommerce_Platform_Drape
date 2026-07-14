@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HiOutlineSearch, HiOutlineHeart, HiOutlineShoppingBag, HiOutlineUser, HiOutlineMenu, HiX } from 'react-icons/hi';
+import { HiOutlineSearch, HiOutlineHeart, HiOutlineShoppingBag, HiOutlineUser, HiOutlineMenu, HiX, HiOutlineHome } from 'react-icons/hi';
 import useScrollNav from '../../hooks/useScrollNav';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import SearchOverlay from '../ui/SearchOverlay';
 
 const Navbar = ({ forcesolid, isAuth }) => {
   const isScrolled = useScrollNav();
@@ -11,6 +12,7 @@ const Navbar = ({ forcesolid, isAuth }) => {
   const { cartCount } = useCart();
   const { user } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const isHome = location.pathname === '/';
   const searchParams = new URLSearchParams(location.search);
@@ -22,6 +24,9 @@ const Navbar = ({ forcesolid, isAuth }) => {
 
   return (
     <>
+      <div className="announcement-bar">
+        Free shipping from ₹2,999 · Easy returns within 14 days
+      </div>
       <nav className={`navbar px-4 md:px-12 ${navClass}`}>
         {/* Left Side: Desktop Links or Mobile Hamburger */}
         <div className="flex items-center flex-1">
@@ -41,7 +46,9 @@ const Navbar = ({ forcesolid, isAuth }) => {
 
         {/* Right Side: Icons */}
         <div className="navbar__icons flex-1 flex justify-end">
-          <Link to="/products" aria-label="Search"><HiOutlineSearch /></Link>
+          <button onClick={() => setSearchOpen(true)} aria-label="Search">
+            <HiOutlineSearch />
+          </button>
           <Link to={user ? '/wishlist' : '/login'} aria-label="Wishlist"><HiOutlineHeart /></Link>
           <Link to="/cart" aria-label="Cart" style={{ position: 'relative' }}>
             <HiOutlineShoppingBag />
@@ -70,6 +77,9 @@ const Navbar = ({ forcesolid, isAuth }) => {
         </div>
       </nav>
 
+      {/* Search Overlay */}
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+
       {/* Mobile Drawer */}
       <div className={`mobile-drawer ${drawerOpen ? 'mobile-drawer--open' : ''}`}>
         <button className="mobile-drawer__close" onClick={() => setDrawerOpen(false)}>
@@ -95,13 +105,38 @@ const Navbar = ({ forcesolid, isAuth }) => {
           )}
         </ul>
         <div className="mobile-drawer__icons">
-          <Link to="/products" onClick={() => setDrawerOpen(false)}><HiOutlineSearch /></Link>
+          <button onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}><HiOutlineSearch /></button>
           <Link to={user ? '/wishlist' : '/login'} onClick={() => setDrawerOpen(false)}><HiOutlineHeart /></Link>
           <Link to="/cart" onClick={() => setDrawerOpen(false)} style={{ position: 'relative' }}>
             <HiOutlineShoppingBag />
             {cartCount > 0 && <span className="cart-badge" style={{ background: '#fff', color: '#1a1a1a' }}>{cartCount}</span>}
           </Link>
         </div>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="mobile-bottom-nav">
+        <Link to="/" className={`mobile-bottom-nav__item ${location.pathname === '/' ? 'mobile-bottom-nav__item--active' : ''}`}>
+          <HiOutlineHome />
+          <span>Home</span>
+        </Link>
+        <Link to="/products" className={`mobile-bottom-nav__item ${location.pathname === '/products' ? 'mobile-bottom-nav__item--active' : ''}`}>
+          <HiOutlineSearch />
+          <span>Shop</span>
+        </Link>
+        <Link to={user ? '/wishlist' : '/login'} className={`mobile-bottom-nav__item ${location.pathname === '/wishlist' ? 'mobile-bottom-nav__item--active' : ''}`}>
+          <HiOutlineHeart />
+          <span>Wishlist</span>
+        </Link>
+        <Link to="/cart" className={`mobile-bottom-nav__item ${location.pathname === '/cart' ? 'mobile-bottom-nav__item--active' : ''}`} style={{ position: 'relative' }}>
+          <HiOutlineShoppingBag />
+          {cartCount > 0 && <span className="mobile-bottom-nav__badge">{cartCount}</span>}
+          <span>Cart</span>
+        </Link>
+        <Link to={user ? '/account' : '/login'} className={`mobile-bottom-nav__item ${location.pathname === '/account' ? 'mobile-bottom-nav__item--active' : ''}`}>
+          <HiOutlineUser />
+          <span>Account</span>
+        </Link>
       </div>
     </>
   );

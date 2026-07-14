@@ -77,3 +77,77 @@ exports.logout = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (name) user.name = name;
+    if (email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser && existingUser._id.toString() !== req.user._id.toString()) {
+        return sendResponse(res, 400, false, null, 'Email already in use');
+      }
+      user.email = email;
+    }
+    if (password) user.password = password;
+
+    await user.save();
+    sendResponse(res, 200, true, {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      addresses: user.addresses,
+    }, 'Profile updated successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Add shipping address
+// @route   POST /api/auth/addresses
+exports.addAddress = async (req, res, next) => {
+  try {
+    const { name, line1, city, state, pincode, phone, isDefault } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (isDefault) {
+      user.addresses.forEach(addr => addr.isDefault = false);
+    }
+
+    user.addresses.push({
+      name,
+      line1,
+      city,
+      state,
+      pincode,
+      phone,
+      isDefault: isDefault || user.addresses.length === 0,
+    });
+
+    await user.save();
+    sendResponse(res, 200, true, user, 'Address added successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete shipping address
+// @route   DELETE /api/auth/addresses/:addressId
+exports.deleteAddress = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    user.addresses = user.addresses.filter(
+      (addr) => addr._id.toString() !== req.params.addressId
+    );
+    await user.save();
+    sendResponse(res, 200, true, user, 'Address deleted successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-  createOrder, verifyPayment, getMyOrders, getOrderById, getAllOrders, updateOrderStatus
+  createOrder, verifyPayment, getMyOrders, getOrderById, getAllOrders, updateOrderStatus, cancelOrder
 } = require('../controllers/orderController');
 const authMiddleware = require('../middleware/authMiddleware');
 const adminMiddleware = require('../middleware/adminMiddleware');
@@ -13,6 +13,7 @@ router.post('/', createOrder);
 router.post('/verify', verifyPayment);
 router.get('/my-orders', getMyOrders);
 router.get('/:id', getOrderById);
+router.put('/:id/cancel', cancelOrder);
 
 // Admin only
 router.get('/', adminMiddleware, getAllOrders);

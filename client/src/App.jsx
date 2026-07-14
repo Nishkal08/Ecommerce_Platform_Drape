@@ -16,6 +16,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Protected pages
 import CheckoutPage from './pages/CheckoutPage';
@@ -33,6 +34,10 @@ import EditProductPage from './pages/admin/EditProductPage';
 import ManageOrdersPage from './pages/admin/ManageOrdersPage';
 import ManageCouponsPage from './pages/admin/ManageCouponsPage';
 import ManageUsersPage from './pages/admin/ManageUsersPage';
+
+// Helpers
+import ScrollToTop from './components/ui/ScrollToTop';
+import BackToTop from './components/ui/BackToTop';
 
 // Layout wrapper for public pages
 const PublicLayout = () => (
@@ -97,6 +102,7 @@ const AdminRoute = () => {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Toaster
         position="bottom-center"
         reverseOrder={false}
@@ -172,8 +178,11 @@ function App() {
         </Route>
 
         {/* Catch all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route element={<InnerLayout />}>
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
       </Routes>
+      <BackToTop />
     </Router>
   );
 }

@@ -9,7 +9,7 @@ const sendResponse = require('../utils/sendResponse');
 // @route   POST /api/orders
 exports.createOrder = async (req, res, next) => {
   try {
-    const { shippingAddress, couponApplied } = req.body;
+    const { shippingAddress, couponApplied, paymentMethod = 'online' } = req.body;
 
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
     if (!cart || cart.items.length === 0) {
@@ -34,6 +34,36 @@ exports.createOrder = async (req, res, next) => {
     const discount = couponApplied?.discount || 0;
     const total = Math.max(subtotal - discount, 0);
 
+    if (paymentMethod === 'cod') {
+      // Create COD Order directly
+      const order = await Order.create({
+        user: req.user._id,
+        items,
+        shippingAddress,
+        paymentInfo: {
+          method: 'cod',
+          status: 'pending',
+        },
+        couponApplied: couponApplied || {},
+        subtotal,
+        discount,
+        total,
+        status: 'processing', // Starts as processing for COD
+      });
+
+      // Clear cart
+      await Cart.findOneAndUpdate({ user: req.user._id }, { items: [] });
+
+      // Decrement stock
+      for (const item of items) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: -item.quantity },
+        });
+      }
+
+      return sendResponse(res, 201, true, { order, isCod: true }, 'Order placed successfully');
+    }
+
     // Create Razorpay order
     let razorpayOrder;
     try {
@@ -57,6 +87,7 @@ exports.createOrder = async (req, res, next) => {
       shippingAddress,
       paymentInfo: {
         razorpay_order_id: razorpayOrder.id,
+        method: 'online',
         status: 'pending',
       },
       couponApplied: couponApplied || {},
@@ -204,3 +235,39 @@ exports.updateOrderStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Cancel order (user or admin)
+// @route   PUT /api/orders/:id/cancel
+exports.cancelOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return sendResponse(res, 404, false, null, 'Order not found');
+    }
+
+    // Check ownership
+    if (order.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return sendResponse(res, 403, false, null, 'Not authorized');
+    }
+
+    // Check status
+    if (order.status !== 'pending' && order.status !== 'processing') {
+      return sendResponse(res, 400, false, null, 'Order cannot be cancelled at this stage');
+    }
+
+    order.status = 'cancelled';
+    await order.save();
+
+    // Restock the inventory
+    for (const item of order.items) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { stock: item.quantity },
+      });
+    }
+
+    sendResponse(res, 200, true, order, 'Order cancelled successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
-const { register, login, getMe, logout } = require('../controllers/authController');
+const { register, login, getMe, logout, updateProfile, addAddress, deleteAddress } = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -19,5 +19,9 @@ router.post('/login', [
 
 router.get('/me', authMiddleware, getMe);
 router.post('/logout', logout);
+
+router.put('/profile', authMiddleware, updateProfile);
+router.post('/addresses', authMiddleware, addAddress);
+router.delete('/addresses/:addressId', authMiddleware, deleteAddress);
 
 module.exports = router;

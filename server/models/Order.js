@@ -38,6 +38,11 @@ const orderSchema = new mongoose.Schema({
   paymentInfo: {
     razorpay_order_id: String,
     razorpay_payment_id: String,
+    method: {
+      type: String,
+      enum: ['online', 'cod'],
+      default: 'online',
+    },
     status: {
       type: String,
       enum: ['pending', 'paid', 'failed'],
