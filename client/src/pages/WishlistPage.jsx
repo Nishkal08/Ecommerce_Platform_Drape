@@ -84,22 +84,19 @@ const WishlistPage = () => {
   return (
     <div className="page">
       <div className="page-content">
-        {/* Header Zone with Visual Rhythm (#8) */}
-        <div className="page-header-zone">
-          {/* Breadcrumb */}
-          <div className="breadcrumb">
-            <Link to="/">Home</Link>
-            <span className="breadcrumb__separator">/</span>
-            <span>Wishlist</span>
-          </div>
+        {/* Breadcrumb */}
+        <div className="breadcrumb">
+          <Link to="/">Home</Link>
+          <span className="breadcrumb__separator">/</span>
+          <span>Wishlist</span>
+        </div>
 
-          {/* Page Header */}
-          <div className="page-header--editorial">
-            <h1>My Wishlist</h1>
-            <span className="page-header__meta">
-              {wishlist.length} {wishlist.length === 1 ? 'Item' : 'Items'}
-            </span>
-          </div>
+        {/* Page Header */}
+        <div className="page-header--editorial">
+          <h1>My Wishlist</h1>
+          <span className="page-header__meta">
+            {wishlist.length} {wishlist.length === 1 ? 'Item' : 'Items'}
+          </span>
         </div>
 
         {/* Signature Stitch Divider (#2) */}
