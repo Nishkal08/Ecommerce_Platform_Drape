@@ -86,13 +86,17 @@ const AdminRoute = () => {
   if (user.role !== 'admin') return <Navigate to="/" replace />;
   return (
     <div className="page">
-      <div className="admin-layout">
+      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] min-h-[calc(100vh-64px)] w-full">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="admin-content">
+        <div className="p-6 md:p-10 bg-[#F7F6F3] min-h-[calc(100vh-64px)] min-w-0 overflow-y-auto">
           <Outlet />
         </div>
-        <button className="admin-sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
-          <HiOutlineMenu />
+        <button
+          className="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center z-50 md:hidden shadow-lg border border-white/10 active:scale-95 transition-transform"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Toggle Sidebar"
+        >
+          <HiOutlineMenu size={20} />
         </button>
       </div>
     </div>
