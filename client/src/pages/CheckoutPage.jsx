@@ -108,8 +108,8 @@ const CheckoutPage = () => {
       // Online payment handling
       const { razorpay_order_id, amount, key_id } = orderRes.data.data;
 
-      // Dev mode: simulate payment if key is dummy/placeholder
-      if (!key_id || key_id === 'your_razorpay_key_id') {
+      // Dev mode: simulate payment if key is dummy/placeholder or if server returned a mock dev order id
+      if (!key_id || key_id === 'your_razorpay_key_id' || razorpay_order_id.startsWith('dev_')) {
         await verifyPayment({
           razorpay_order_id,
           razorpay_payment_id: 'dev_pay_' + Date.now(),

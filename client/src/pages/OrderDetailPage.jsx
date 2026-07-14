@@ -41,8 +41,8 @@ const OrderDetailPage = () => {
       const amount = order.total * 100; // Razorpay needs paise
       const key_id = order.razorpay_key_id;
 
-      // Check if Razorpay key is a placeholder
-      if (!key_id || key_id === 'your_razorpay_key_id') {
+      // Check if Razorpay key is a placeholder or order ID is a dev mock
+      if (!key_id || key_id === 'your_razorpay_key_id' || razorpay_order_id.startsWith('dev_')) {
         // Dev mode: simulate payment
         await verifyPayment({
           razorpay_order_id,
