@@ -12,6 +12,7 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [] });
   const [loading, setLoading] = useState(false);
   const [updatingItemId, setUpdatingItemId] = useState(null);
+  const [isCartOpen, setCartOpen] = useState(false);
   const undoTimerRef = useRef(null);
 
   const fetchCart = useCallback(async () => {
@@ -35,6 +36,7 @@ export const CartProvider = ({ children }) => {
       const res = await cartService.addToCart({ productId, quantity, size });
       setCart(res.data.data);
       toast.success('Added to cart');
+      setCartOpen(true); // Open cart drawer on success
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to add item');
     }
@@ -152,7 +154,8 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider value={{
       cart, loading, cartCount, cartTotal,
       addItem, updateItem, updateItemSize, removeItem, removeItemWithUndo,
-      clearAllItems, fetchCart, updatingItemId
+      clearAllItems, fetchCart, updatingItemId,
+      isCartOpen, setCartOpen
     }}>
       {children}
     </CartContext.Provider>

@@ -41,6 +41,10 @@ const ProductDetailPage = () => {
   // Review form
   const [reviewForm, setReviewForm] = useState({ rating: 5, title: '', body: '' });
 
+  // Mobile Sticky Quick-Buy Bar
+  const buyActionsRef = useRef(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -67,6 +71,28 @@ const ProductDetailPage = () => {
     window.scrollTo(0, 0);
   }, [slug]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowStickyBar(!entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: '-80px 0px 0px 0px' }
+    );
+
+    const currentRef = buyActionsRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [product]);
+
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.pageX - window.scrollX - left) / width) * 100;
@@ -90,8 +116,12 @@ const ProductDetailPage = () => {
       navigate('/login', { state: { from: location } });
       return;
     }
-    if (!selectedSize && product.sizes?.length > 0) {
+    if (!selectedSize && product.sizes?.length > 0 && product.sizes[0] !== 'FREE') {
       toast.error('Please select a size');
+      const sizeEl = document.getElementById('size-selector-section');
+      if (sizeEl) {
+        sizeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
     addItem(product._id, quantity, selectedSize);
@@ -213,7 +243,7 @@ const ProductDetailPage = () => {
 
             {/* Size selector & Size Guide trigger */}
             {product.sizes?.length > 0 && product.sizes[0] !== 'FREE' && (
-              <div style={{ marginBottom: '24px' }}>
+              <div id="size-selector-section" style={{ marginBottom: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <label style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--charcoal)' }}>
                     Size
@@ -262,8 +292,8 @@ const ProductDetailPage = () => {
               )}
             </div>
 
-            {/* Actions (Sticky on Mobile) */}
-            <div className="fixed md:static bottom-0 left-0 w-full md:w-auto bg-white md:bg-transparent border-t border-[var(--border)] md:border-none p-4 md:p-0 z-[60] flex gap-3 md:mb-8 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] md:shadow-none">
+            {/* Actions (Inline flow with ref tracking) */}
+            <div ref={buyActionsRef} className="flex gap-3 mb-8">
               <button
                 className="btn btn--primary btn--lg"
                 style={{ flex: 1 }}
@@ -477,6 +507,38 @@ const ProductDetailPage = () => {
               </span>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Sticky Mobile Quick-Buy Bar */}
+      {product && (
+        <div
+          className={`fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-black/5 p-3 md:hidden flex items-center justify-between shadow-[0_-8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 ${
+            showStickyBar ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+          }`}
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-12 bg-black/[0.02] rounded overflow-hidden flex-shrink-0 border border-black/5">
+              <img
+                src={product.images?.[0]?.url}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <div className="font-sans text-xs font-bold text-charcoal truncate">{product.name}</div>
+              <div className="font-sans text-[11px] text-black/40 mt-0.5">
+                {formatPrice(product.price)} {selectedSize && `· Size: ${selectedSize}`}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            disabled={product.stock === 0}
+            className="btn btn--primary btn--sm py-2 px-6 text-[10.5px] font-sans font-bold uppercase tracking-wider flex-shrink-0"
+          >
+            {product.stock === 0 ? 'Sold Out' : 'Add to Bag'}
+          </button>
         </div>
       )}
     </div>

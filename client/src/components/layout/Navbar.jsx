@@ -5,11 +5,12 @@ import useScrollNav from '../../hooks/useScrollNav';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import SearchOverlay from '../ui/SearchOverlay';
+import CartDrawer from './CartDrawer';
 
 const Navbar = ({ forcesolid, isAuth }) => {
   const isScrolled = useScrollNav();
   const location = useLocation();
-  const { cartCount } = useCart();
+  const { cartCount, setCartOpen } = useCart();
   const { user } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -47,10 +48,15 @@ const Navbar = ({ forcesolid, isAuth }) => {
             <HiOutlineSearch />
           </button>
           <Link to={user ? '/wishlist' : '/login'} aria-label="Wishlist"><HiOutlineHeart /></Link>
-          <Link to="/cart" aria-label="Cart" style={{ position: 'relative' }}>
+          <button
+            onClick={() => setCartOpen(true)}
+            aria-label="Cart"
+            style={{ position: 'relative' }}
+            className="bg-transparent border-none p-0 cursor-pointer flex items-center justify-center"
+          >
             <HiOutlineShoppingBag />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-          </Link>
+          </button>
           <div className="hidden md:flex ml-6 items-center">
             {user ? (
               <Link to="/account" aria-label="Account" title="My Account" className="relative group flex items-center justify-center w-9 h-9 rounded-full overflow-hidden">
@@ -74,8 +80,9 @@ const Navbar = ({ forcesolid, isAuth }) => {
         </div>
       </nav>
 
-      {/* Search Overlay */}
+      {/* Search & Cart Overlays */}
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      <CartDrawer />
 
       {/* Mobile Drawer */}
       <div className={`mobile-drawer ${drawerOpen ? 'mobile-drawer--open' : ''}`}>
