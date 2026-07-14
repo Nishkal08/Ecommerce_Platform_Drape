@@ -370,47 +370,13 @@ const CheckoutPage = () => {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '16px', marginTop: '12px', flexDirection: 'column' }}>
-                    <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
-                      <button onClick={() => setStep(2)} className="btn btn--outline btn--sm" style={{ flex: 1 }} disabled={loading}>
-                        Back to Payment
-                      </button>
-                      <button onClick={handlePlaceOrder} className="btn btn--primary btn--sm" style={{ flex: 1 }} disabled={loading}>
-                        {loading ? 'Placing Order...' : `Place Order · ${formatPrice(total)}`}
-                      </button>
-                    </div>
-                    {paymentMethod === 'online' && (
-                      <button
-                        onClick={async () => {
-                          setLoading(true);
-                          try {
-                            const orderRes = await createOrder({
-                              shippingAddress: address,
-                              couponApplied,
-                              paymentMethod: 'online'
-                            });
-                            const { razorpay_order_id } = orderRes.data.data;
-                            await verifyPayment({
-                              razorpay_order_id,
-                              razorpay_payment_id: 'dev_pay_' + Date.now(),
-                              razorpay_signature: 'dev_signature',
-                            });
-                            toast.success('Order placed successfully! (Payment simulated)');
-                            clearAllItems();
-                            navigate(`/orders/${orderRes.data.data.order._id}`);
-                          } catch (err) {
-                            toast.error('Simulation failed: ' + (err.response?.data?.message || err.message));
-                          } finally {
-                            setLoading(false);
-                          }
-                        }}
-                        className="btn btn--outline btn--sm"
-                        style={{ width: '100%', borderColor: 'var(--accent)', color: 'var(--accent)' }}
-                        disabled={loading}
-                      >
-                        Simulate Payment Success (Bypass Razorpay)
-                      </button>
-                    )}
+                  <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
+                    <button onClick={() => setStep(2)} className="btn btn--outline btn--sm" style={{ flex: 1 }} disabled={loading}>
+                      Back to Payment
+                    </button>
+                    <button onClick={handlePlaceOrder} className="btn btn--primary btn--sm" style={{ flex: 1 }} disabled={loading}>
+                      {loading ? 'Placing Order...' : `Place Order · ${formatPrice(total)}`}
+                    </button>
                   </div>
                 </div>
               )}

@@ -206,32 +206,9 @@ const OrderDetailPage = () => {
             <Link to="/orders" className="btn btn--outline btn--sm">← Back to Orders</Link>
             
             {order.status === 'pending' && (
-              <>
-                <button onClick={handlePay} className="btn btn--primary btn--sm">
-                  Pay Now ({formatPrice(order.total)})
-                </button>
-                <button
-                  onClick={async () => {
-                    try {
-                      setVerifying(true);
-                      await verifyPayment({
-                        razorpay_order_id: order.paymentInfo.razorpay_order_id,
-                        razorpay_payment_id: 'dev_pay_' + Date.now(),
-                        razorpay_signature: 'dev_signature',
-                      });
-                      toast.success('Payment simulated successfully!');
-                      loadOrder();
-                    } catch {
-                      setVerifying(false);
-                      toast.error('Simulation failed');
-                    }
-                  }}
-                  className="btn btn--outline btn--sm"
-                  style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-                >
-                  Simulate Payment Success (Bypass Razorpay)
-                </button>
-              </>
+              <button onClick={handlePay} className="btn btn--primary btn--sm">
+                Pay Now ({formatPrice(order.total)})
+              </button>
             )}
             
             {['paid', 'processing', 'shipped', 'delivered'].includes(order.status) && (
