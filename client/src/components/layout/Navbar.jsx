@@ -24,9 +24,6 @@ const Navbar = ({ forcesolid, isAuth }) => {
 
   return (
     <>
-      <div className="announcement-bar">
-        Free shipping from ₹2,999 · Easy returns within 14 days
-      </div>
       <nav className={`navbar px-4 md:px-12 ${navClass}`}>
         {/* Left Side: Desktop Links or Mobile Hamburger */}
         <div className="flex items-center flex-1">
