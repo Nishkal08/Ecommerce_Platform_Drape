@@ -167,21 +167,21 @@ const CartPage = () => {
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                     <div>
                       {/* Category */}
-                      <div className="text-[10px] font-sans font-semibold tracking-wider text-black/35 uppercase">
+                      <div className="text-[10px] font-sans font-semibold tracking-widest text-black/35 uppercase">
                         {item.product?.category || 'Women'}
                       </div>
                       {/* Title */}
-                      <Link to={`/products/${item.product?.slug}`} className="font-sans text-sm font-bold text-charcoal tracking-wide mt-0.5 hover:underline block truncate">
+                      <Link to={`/products/${item.product?.slug}`} className="font-sans text-[15px] font-bold text-charcoal tracking-wide mt-0.5 hover:underline block truncate">
                         {item.product?.name}
                       </Link>
                       {/* Sub-description (Fabric info fallback) */}
-                      <div className="text-[11px] font-sans text-black/40 mt-1 uppercase tracking-wider">
-                        {item.product?.fabric || '100% Merino Wool'}
+                      <div className="text-[9.5px] font-sans text-black/40 mt-1 uppercase tracking-widest font-medium">
+                        {item.product?.fabric || '100% MERINO WOOL'}
                       </div>
 
                       {/* Size Selector */}
-                      <div className="text-[11px] font-sans text-black/50 mt-1.5 uppercase font-medium flex items-center gap-1.5">
-                        <span>Size:</span>
+                      <div className="text-[10px] font-sans text-black/50 mt-2 uppercase font-semibold tracking-wider flex items-center gap-1">
+                        <span>SIZE:</span>
                         {item.product?.sizes?.length > 0 ? (
                           <select
                             className="bg-transparent border-none p-0 pr-4 font-bold text-charcoal cursor-pointer outline-none font-sans uppercase tracking-wider"
@@ -200,18 +200,18 @@ const CartPage = () => {
                     </div>
 
                     {/* Controls (Stepper, Save, Remove) */}
-                    <div className="flex items-center gap-6 mt-4 flex-wrap">
+                    <div className="flex items-center gap-5 mt-4 flex-wrap">
                       {/* Stepper */}
-                      <div className="flex items-center border border-black/10 rounded-md bg-[#FAF9F6] h-8 text-xs overflow-hidden">
+                      <div className="flex items-center border border-black/10 rounded bg-[#FAF9F6] h-7 text-[11px] overflow-hidden">
                         <button
                           onClick={() => item.quantity > 1 && updateItem(item._id, item.quantity - 1)}
-                          className="px-3 h-full hover:bg-black/5 transition-colors font-medium border-none bg-transparent cursor-pointer"
+                          className="px-2.5 h-full hover:bg-black/5 transition-colors font-medium border-none bg-transparent cursor-pointer text-black/50"
                           aria-label={`Decrease quantity of ${item.product?.name}`}
                         >−</button>
-                        <span className="px-2 font-medium min-w-[24px] text-center">{item.quantity}</span>
+                        <span className="px-2 font-medium min-w-[20px] text-center text-charcoal">{item.quantity}</span>
                         <button
                           onClick={() => updateItem(item._id, item.quantity + 1)}
-                          className="px-3 h-full hover:bg-black/5 transition-colors font-medium border-none bg-transparent cursor-pointer"
+                          className="px-2.5 h-full hover:bg-black/5 transition-colors font-medium border-none bg-transparent cursor-pointer text-black/50"
                           aria-label={`Increase quantity of ${item.product?.name}`}
                         >+</button>
                       </div>
@@ -219,38 +219,38 @@ const CartPage = () => {
                       {/* Save for later */}
                       <button
                         onClick={() => handleSaveForLater(item)}
-                        className="text-[11px] font-sans font-bold tracking-wider uppercase text-black/40 hover:text-charcoal transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer"
+                        className="text-[9.5px] font-sans font-bold tracking-widest uppercase text-black/40 hover:text-charcoal transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer"
                         title="Move to wishlist"
                         aria-label={`Save ${item.product?.name} for later`}
                       >
-                        <HiOutlineHeart size={14} /> Save For Later
+                        <HiOutlineHeart size={13} className="text-black/30" /> Save For Later
                       </button>
 
                       {/* Remove */}
                       <button
                         onClick={() => removeItemWithUndo(item._id)}
-                        className="text-[11px] font-sans font-bold tracking-wider uppercase text-black/40 hover:text-red-500 transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer"
+                        className="text-[9.5px] font-sans font-bold tracking-widest uppercase text-black/40 hover:text-red-500 transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer"
                         title="Remove item"
                         aria-label={`Remove ${item.product?.name} from cart`}
                       >
-                        <HiOutlineTrash size={14} /> Remove
+                        <HiOutlineTrash size={13} className="text-black/30" /> Remove
                       </button>
                     </div>
 
                     {/* Urgency indicators */}
                     <div className="mt-3.5 space-y-1.5">
                       {priceDiff > 0 && (
-                        <div className="text-[11px] font-sans font-semibold text-green-600 uppercase tracking-wide">
+                        <div className="text-[10px] font-sans font-semibold text-green-600 uppercase tracking-wide">
                           ↓ Price dropped {formatPrice(priceDiff)} since added
                         </div>
                       )}
                       {item.product?.stock > 0 && item.product.stock <= 5 && (
-                        <div className="text-[11px] font-sans font-semibold text-red-500 uppercase tracking-wide">
+                        <div className="text-[10px] font-sans font-semibold text-red-500 uppercase tracking-wide">
                           Only {item.product.stock} pieces left in stock
                         </div>
                       )}
-                      <div className="text-[11px] font-sans text-black/40 flex items-center gap-1.5 uppercase tracking-wider">
-                        <HiOutlineTruck size={13} /> Arrives by {estimatedDate}
+                      <div className="text-[10px] font-sans text-black/35 flex items-center gap-1.5 uppercase tracking-widest font-semibold">
+                        <HiOutlineTruck size={13} className="text-black/30" /> Arrives by {estimatedDate}
                       </div>
                     </div>
                   </div>
